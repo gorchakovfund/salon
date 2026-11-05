@@ -178,7 +178,11 @@
   .fh{text-align:center;margin-bottom:3.2cqh}
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
-  .cols{display:flex;gap:5cqw;flex:1;min-height:0}
+  .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
+    grid-template-areas:"name name" "phone email" "chk sig" "err go";grid-template-rows:auto auto 1fr auto}
+  .g-name{grid-area:name}.g-phone{grid-area:phone}.g-email{grid-area:email}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
+  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "phone" "email" "chk" "sig" "go" "err";grid-template-rows:auto auto auto auto 1fr auto auto}
+  .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
   .fl input{margin-top:.6cqh;border:0;border-bottom:1px solid rgba(110,52,30,.6);background:transparent;padding:.8cqh 0;font-family:"Old Standard TT",serif;font-size:max(15px,4.4cqh);color:#2e170c;outline:none;border-radius:0;letter-spacing:0;text-transform:none}
@@ -190,7 +194,7 @@
   .chk .box{flex:none;width:max(16px,4.6cqh);height:max(16px,4.6cqh);border:1.4px solid #6e341e;margin-top:.3em;position:relative;background:rgba(255,255,255,.25)}
   .chk input:checked + .box::after{content:"";position:absolute;left:22%;top:2%;width:34%;height:62%;border:solid #6E1F2B;border-width:0 2.4px 2.4px 0;transform:rotate(42deg)}
   .chk b{font-weight:700}
-  .sig{position:relative;flex:1;min-height:max(70px,18cqh);display:flex;flex-direction:column}
+  .sig{position:relative;min-height:max(70px,18cqh);display:flex;flex-direction:column}
   .sig canvas{flex:1;width:100%;min-height:0;touch-action:none;cursor:crosshair;border-bottom:1px solid rgba(110,52,30,.6);
     background:linear-gradient(transparent calc(100% - 1px), transparent) }
   .sig .sl{display:flex;justify-content:space-between;font-size:max(9px,2.4cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a;margin-top:.8cqh}
@@ -225,7 +229,7 @@
   #skipBtn{pointer-events:auto;border:1px solid rgba(201,162,90,.55);background:rgba(10,6,4,.35);color:#d9b56e;font-family:"Old Standard TT",serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
     padding:9px 14px;border-radius:2px;cursor:pointer;white-space:nowrap;transition:opacity .5s,background .2s}
   #skipBtn:hover{background:rgba(201,162,90,.15)}
-  #stage[data-s="4"] #skipBtn{opacity:0;pointer-events:none}
+  #stage.formopen #skipBtn{opacity:0;pointer-events:none}
   #thint{position:absolute;left:0;right:0;bottom:max(3.5vh,16px);text-align:center;color:#efdcb4;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(18px,2.2vw,26px);text-shadow:0 2px 14px #000;transition:opacity .6s;pointer-events:none}
   #tview.portrait-mode #thint{bottom:max(5vh,22px)}
   #stage:has(#tview.on) .bk-back{opacity:0!important}
@@ -267,18 +271,14 @@
   <div id="hdr"><img src="img/logo-light.png" alt="Фонд Горчакова"><button type="button" id="skipBtn">Пропустить →</button></div>
   <div id="tview"><div id="tbig"><div class="tk"><div class="flipper"><div class="face fr"><img class="tm" src="img/ticket-main.webp" alt=""></div><div class="face bk"><div class="bkc" id="bkc"><form id="rsvp" novalidate autocomplete="on">
             <div class="fh"><div class="fk">Подтверждение участия</div><div class="ft">Литературно-рождественский салон · 25 декабря, 17:00</div></div>
-            <div class="cols">
-              <div class="col">
-                <label class="fl">Фамилия, имя, отчество<input name="name" autocomplete="name" required></label>
-                <label class="fl">Телефон<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
-                <label class="fl">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
-              </div>
-              <div class="col">
-                <label class="chk"><input type="checkbox" name="plusone"><span class="box"></span><span class="ct"><b>Желаете ли вы прийти +1?</b> Если да, поставьте галочку — мы сообщим дополнительно, если это будет возможно.</span></label>
-                <div class="sig"><canvas id="sigc"></canvas><div class="sl"><span>Подпись</span><button type="button" id="sigclr">очистить</button></div></div>
-                <button type="submit" class="go" id="goBtn">Подтвердить участие</button>
-                <div class="ferr" id="ferr"></div>
-              </div>
+            <div class="grid">
+              <label class="fl g-name">Фамилия, имя, отчество<input name="name" autocomplete="name" required></label>
+              <label class="fl g-phone">Телефон<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
+              <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
+              <label class="chk g-chk"><input type="checkbox" name="plusone"><span class="box"></span><span class="ct"><b>Желаете ли вы прийти +1?</b> Если да, поставьте галочку — мы сообщим дополнительно, если это будет возможно.</span></label>
+              <div class="sig g-sig"><canvas id="sigc"></canvas><div class="sl"><span>Подпись</span><button type="button" id="sigclr">очистить</button></div></div>
+              <div class="ferr g-err" id="ferr"></div>
+              <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
           </form>
           <div class="thanks" id="thanks" hidden><div class="orn">❦</div><div class="tt">Благодарим!</div><div class="tx">Ваш ответ получен.<br>Подробности — совсем скоро.</div></div></div></div></div><img class="ts" src="img/ticket-stub.webp" alt=""></div></div><div id="thint">Оторвите корешок — там послание для Вас</div><div id="player"><div id="plbl">Несколько слов для Вас</div><button id="pbtn" type="button" aria-label="Послушать"></button><div id="pwave"></div><div id="pnote" hidden></div></div><button type="button" id="flipBtn">перевернуть билет ↻</button></div>
@@ -516,7 +516,7 @@
   function closeTicket(instant){
     if(tState === "book") return;
     tState = "book"; stopVoice();
-    tview.classList.remove("on","tear-ready","torn"); tbig.classList.remove("torn");
+    tview.classList.remove("on","tear-ready","torn","flipped"); tbig.classList.remove("torn","flipped"); stage.classList.remove("formopen");
     setTimeout(() => { inT.classList.remove("gone"); if(step === 4 && stage.classList.contains("opened")) bkHint.classList.add("on"); }, instant ? 0 : 400);
   }
 
@@ -553,7 +553,7 @@
   // ---------- flip: the back side holds the RSVP form ----------
   function flip(){
     if(tState !== "torn") return;
-    tState = "flipped"; tbig.classList.add("flipped"); tview.classList.add("flipped");
+    tState = "flipped"; tbig.classList.add("flipped"); tview.classList.add("flipped"); stage.classList.add("formopen");
     setTimeout(() => window.__sigResize && window.__sigResize(), 1600);
   }
   document.getElementById("flipBtn").addEventListener("click", e => { e.stopPropagation(); flip(); });
@@ -648,7 +648,15 @@
   // ---------- skip the intro: open straight on the ticket ----------
   document.getElementById("skipBtn").addEventListener("click", e => {
     e.stopPropagation(); unlock();
-    if(step === 4) return;
+    if(step === 4){
+      if(tState === "book"){ bkHint.classList.remove("on"); openTicket(); }
+      else if(tState === "big"){                     // tear without waiting, skip the voice, turn over
+        tState = "torn"; tview.classList.remove("tear-ready"); tbig.classList.add("torn"); thint.style.opacity = 0;
+        setTimeout(flip, 900);
+      }
+      else if(tState === "torn"){ stopVoice(); flip(); }
+      return;
+    }
     lightT.forEach(clearTimeout); bookT.forEach(clearTimeout); clearTimeout(capT); clearTimeout(hintT);
     match.getAnimations().forEach(a => a.cancel()); match.classList.remove("burn");
     cap.classList.remove("on"); hint.classList.remove("on");
