@@ -216,6 +216,15 @@
   .thanks[hidden],#rsvp[hidden]{display:none!important}
   #tview.flipped #flipBtn{display:none}
   .thanks{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .cal{margin-top:max(14px,5cqh);display:flex;flex-direction:column;align-items:center;gap:max(8px,2cqh)}
+  .cal .cl{font-size:max(9px,2.4cqh);letter-spacing:.2em;text-transform:uppercase;color:#8a5a3a}
+  .cal .cb{display:flex;gap:max(8px,2cqw);flex-wrap:wrap;justify-content:center}
+  .calbtn{display:inline-block;text-decoration:none;border:1px solid #6E1F2B;color:#6E1F2B;font-family:"Old Standard TT",serif;font-size:max(11px,2.8cqh);letter-spacing:.12em;text-transform:uppercase;
+    padding:max(8px,2cqh) max(12px,3cqw);background:rgba(255,255,255,.3);transition:background .2s,color .2s}
+  .calbtn:hover{background:#6E1F2B;color:#f6ead2}
+  .bkc.portrait .cal .cb{flex-direction:column;align-items:stretch;width:100%}
+  .bkc.portrait .calbtn{text-align:center;font-size:max(11px,1.6cqh)}
+  .bkc.portrait .cal .cl{font-size:max(9px,1.4cqh)}
   .thanks .orn{color:#a8834a;font-size:max(22px,8cqh)}
   .thanks .tt{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(30px,12cqh);color:#6E1F2B;margin:1cqh 0 2cqh}
   .thanks .tx{font-size:max(14px,4.2cqh);line-height:1.5;color:#4a2414}
@@ -281,7 +290,7 @@
               <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
           </form>
-          <div class="thanks" id="thanks" hidden><div class="orn">❦</div><div class="tt">Благодарим!</div><div class="tx">Ваш ответ получен.<br>Подробности — совсем скоро.</div></div></div></div></div><img class="ts" src="img/ticket-stub.webp" alt=""></div></div><div id="thint">Оторвите корешок — там послание для Вас</div><div id="player"><div id="plbl">Несколько слов для Вас</div><button id="pbtn" type="button" aria-label="Послушать"></button><div id="pwave"></div><div id="pnote" hidden></div></div><button type="button" id="flipBtn">перевернуть билет ↻</button></div>
+          <div class="thanks" id="thanks" hidden><div class="orn">❦</div><div class="tt">Благодарим!</div><div class="tx">Ваш ответ получен.<br>Подробности — совсем скоро.</div><div class="cal"><div class="cl">Добавить в календарь</div><div class="cb"><a class="calbtn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%D0%9B%D0%B8%D1%82%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%BD%D0%BE-%D1%80%D0%BE%D0%B6%D0%B4%D0%B5%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%20%D1%81%D0%B0%D0%BB%D0%BE%D0%BD%20%E2%80%94%20%D0%A4%D0%BE%D0%BD%D0%B4%20%D0%93%D0%BE%D1%80%D1%87%D0%B0%D0%BA%D0%BE%D0%B2%D0%B0&dates=20261225T140000Z/20261225T170000Z&ctz=Europe/Moscow&location=%D0%94%D0%BE%D0%BC%20%D0%9F%D0%B0%D1%88%D0%BA%D0%BE%D0%B2%D0%B0%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB.%20%D0%92%D0%BE%D0%B7%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%BA%D0%B0%2C%203/5%2C%20%D1%81%D1%82%D1%80.%201&details=%D0%94%D1%80%D0%B5%D1%81%D1%81-%D0%BA%D0%BE%D0%B4%3A%20Black%20tie.%0A%D0%9F%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%BE%D1%81%D1%82%D0%B8%20%E2%80%94%20%D1%81%D0%BE%D0%B2%D1%81%D0%B5%D0%BC%20%D1%81%D0%BA%D0%BE%D1%80%D0%BE." target="_blank" rel="noopener">Google Календарь</a><a class="calbtn" href="salon.ics" target="_blank" rel="noopener">Яндекс · Apple · Outlook</a></div></div></div></div></div></div><img class="ts" src="img/ticket-stub.webp" alt=""></div></div><div id="thint">Оторвите корешок — там послание для Вас</div><div id="player"><div id="plbl">Несколько слов для Вас</div><button id="pbtn" type="button" aria-label="Послушать"></button><div id="pwave"></div><div id="pnote" hidden></div></div><button type="button" id="flipBtn">перевернуть билет ↻</button></div>
   <div id="bookview">
     <div class="persp">
       <div class="book" id="book">
@@ -707,7 +716,7 @@
   stage.addEventListener("touchstart", e => { ty0 = e.touches[0].clientY; tapTarget = e.target; }, {passive:true});
   [stage, tview, document.getElementById("tbig"), document.scrollingElement].forEach(el => el && el.addEventListener("scroll", () => { el.scrollTop = 0; el.scrollLeft = 0; }, {passive:true}));
   addEventListener("scroll", () => scrollTo(0,0), {passive:true});
-  const inForm = t => t && t.closest && t.closest("#rsvp, #flipBtn, #pbtn, #hdr");
+  const inForm = t => t && t.closest && t.closest("#rsvp, #flipBtn, #pbtn, #hdr, #thanks");
   const formOpen = () => tState === "flipped" || tState === "sent";
   stage.addEventListener("touchmove", e => { if(!inForm(e.target)) e.preventDefault(); }, {passive:false});
   stage.addEventListener("touchend", e => {
