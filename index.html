@@ -349,7 +349,7 @@
 
   // ---------- sound: door creak, match, book, voice (browsers allow sound only after a tap/click/key) ----------
   let AC = null, MASTER = null, MUSIC = null, musicStarted = false, muted = false; const RAW = {}, BUF = {};
-  const MUSIC_VOL = .055, MUSIC_DUCK = .014;
+  const MUSIC_VOL = .12, MUSIC_DUCK = .025;
   ["door","match","book","voice"].forEach(n => fetch(`audio/${n}.mp3`).then(r => r.ok ? r.arrayBuffer() : null).then(b => { if(b) RAW[n] = b; }).catch(() => {}));
   function unlock(){
     try{
@@ -359,7 +359,7 @@
     }catch(e){}
   }
   // quiet background music, looped; streams and starts right on the tap that opens the door
-  const musicEl = new Audio("audio/music.mp3"); musicEl.loop = true; musicEl.preload = "auto";
+  const musicEl = new Audio("audio/music.mp3?v=3"); musicEl.loop = true; musicEl.preload = "auto";
   function startMusic(){
     if(musicStarted || !AC) return;
     musicStarted = true;
