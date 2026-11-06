@@ -349,7 +349,7 @@
 
   // ---------- sound: door creak, match, book, voice (browsers allow sound only after a tap/click/key) ----------
   let AC = null, MASTER = null, MUSIC = null, musicStarted = false, muted = false; const RAW = {}, BUF = {};
-  const MUSIC_VOL = .16, MUSIC_DUCK = .035;
+  const MUSIC_VOL = .055, MUSIC_DUCK = .014;
   ["door","match","book","voice"].forEach(n => fetch(`audio/${n}.mp3`).then(r => r.ok ? r.arrayBuffer() : null).then(b => { if(b) RAW[n] = b; }).catch(() => {}));
   function unlock(){
     try{
@@ -367,7 +367,7 @@
       MUSIC = AC.createGain(); MUSIC.gain.value = 0;
       AC.createMediaElementSource(musicEl).connect(MUSIC).connect(MASTER);
       const p = musicEl.play(); if(p && p.catch) p.catch(() => { musicStarted = false; });
-      MUSIC.gain.setValueAtTime(0, AC.currentTime); MUSIC.gain.linearRampToValueAtTime(MUSIC_VOL, AC.currentTime + 1.5);
+      MUSIC.gain.setValueAtTime(0, AC.currentTime); MUSIC.gain.linearRampToValueAtTime(MUSIC_VOL, AC.currentTime + .8);
     }catch(e){ musicStarted = false; }
   }
   function musicTo(v, sec){ if(!MUSIC) return; const t = AC.currentTime; MUSIC.gain.cancelScheduledValues(t); MUSIC.gain.setValueAtTime(MUSIC.gain.value, t); MUSIC.gain.linearRampToValueAtTime(v, t + sec); }
