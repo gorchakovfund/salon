@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Литературно-рождественский салон</title>
+<title>Новогодний салон — Фонд Горчакова</title>
 <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <style>
   html,body{margin:0;height:100%;background:#050302;overflow:hidden;overscroll-behavior:none}
@@ -176,12 +176,15 @@
   .bkc{position:absolute;left:50%;top:50%;container-type:size;color:#4a2414;font-family:"Old Standard TT",serif}
   #rsvp{position:absolute;inset:0;display:flex;flex-direction:column}
   .fh{text-align:center;margin-bottom:3.2cqh}
+  .ftime{margin-top:1.2cqh;font-size:max(11px,3cqh);letter-spacing:.06em;color:#4a2414}
+  .ftime b{color:#6E1F2B;font-weight:700}
+  .bkc.portrait .ftime{font-size:max(11px,1.7cqh)}
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
-    grid-template-areas:"name name" "phone email" "chk sig" "err go";grid-template-rows:auto auto 1fr auto}
+    grid-template-areas:"name name" "phone email" "sig sig" "err go";grid-template-rows:auto auto 1fr auto}
   .g-name{grid-area:name}.g-phone{grid-area:phone}.g-email{grid-area:email}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
-  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "phone" "email" "chk" "sig" "go" "err";grid-template-rows:auto auto auto auto 1fr auto auto}
+  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "phone" "email" "sig" "go" "err";grid-template-rows:auto auto auto 1fr auto auto}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
@@ -225,6 +228,11 @@
   .bkc.portrait .cal .cb{flex-direction:column;align-items:stretch;width:100%}
   .bkc.portrait .calbtn{text-align:center;font-size:max(11px,1.6cqh)}
   .bkc.portrait .cal .cl{font-size:max(9px,1.4cqh)}
+  .tgbtn{margin-top:max(12px,3.5cqh);display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#6E1F2B;color:#f6ead2;font-family:"Old Standard TT",serif;
+    font-size:max(11px,2.8cqh);letter-spacing:.12em;text-transform:uppercase;padding:max(9px,2.2cqh) max(14px,3.4cqw);box-shadow:inset 0 0 0 1px rgba(217,180,106,.55), inset 0 0 0 4px #6E1F2B, inset 0 0 0 5px rgba(217,180,106,.35)}
+  .tgbtn[hidden]{display:none}
+  .tgbtn svg{width:1.3em;height:1.3em}
+  .bkc.portrait .tgbtn{font-size:max(11px,1.6cqh);width:100%;justify-content:center;box-sizing:border-box}
   .thanks .orn{color:#a8834a;font-size:max(22px,8cqh)}
   .thanks .tt{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(30px,12cqh);color:#6E1F2B;margin:1cqh 0 2cqh}
   .thanks .tx{font-size:max(14px,4.2cqh);line-height:1.5;color:#4a2414}
@@ -284,18 +292,17 @@
   <div id="hint"><span id="hintText">Листайте вниз</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg></div>
   <div id="hdr"><img src="img/logo-light.png" alt="Фонд Горчакова"><div class="hbtns"><button type="button" id="sndBtn" aria-label="Выключить звук" title="Выключить звук"><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" fill-opacity=".15"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><svg class="mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" fill-opacity=".15"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button><button type="button" id="skipBtn">Пропустить →</button></div></div>
   <div id="tview"><div id="tbig"><div class="tk"><div class="flipper"><div class="face fr"><img class="tm" src="img/ticket-main.webp" alt=""></div><div class="face bk"><div class="bkc" id="bkc"><form id="rsvp" novalidate autocomplete="on">
-            <div class="fh"><div class="fk">Подтверждение участия</div><div class="ft">Литературно-рождественский салон · 25 декабря, 17:00</div></div>
+            <div class="fh"><div class="fk">Подтверждение участия</div><div class="ft">Новогодний салон · 25 декабря · Дом Пашкова</div><div class="ftime">Сбор гостей — <b>16:00</b> · Начало — <b>17:00</b></div></div>
             <div class="grid">
               <label class="fl g-name">Фамилия, имя, отчество<input name="name" autocomplete="name" required></label>
               <label class="fl g-phone">Телефон<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
               <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
-              <label class="chk g-chk"><input type="checkbox" name="plusone"><span class="box"></span><span class="ct"><b>Желаете ли вы прийти +1?</b> Если да, поставьте галочку — мы сообщим дополнительно, если это будет возможно.</span></label>
               <div class="sig g-sig"><canvas id="sigc"></canvas><div class="sl"><span>Подпись</span><button type="button" id="sigclr">очистить</button></div></div>
               <div class="ferr g-err" id="ferr"></div>
               <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
           </form>
-          <div class="thanks" id="thanks" hidden><div class="orn">❦</div><div class="tt">Благодарим!</div><div class="tx">Подробности — совсем скоро.</div><div class="cal"><div class="cl">Создать напоминание</div><div class="cb"><a class="calbtn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%D0%9B%D0%B8%D1%82%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%BD%D0%BE-%D1%80%D0%BE%D0%B6%D0%B4%D0%B5%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%20%D1%81%D0%B0%D0%BB%D0%BE%D0%BD%20%E2%80%94%20%D0%A4%D0%BE%D0%BD%D0%B4%20%D0%93%D0%BE%D1%80%D1%87%D0%B0%D0%BA%D0%BE%D0%B2%D0%B0&dates=20261225T140000Z/20261225T170000Z&ctz=Europe/Moscow&location=%D0%94%D0%BE%D0%BC%20%D0%9F%D0%B0%D1%88%D0%BA%D0%BE%D0%B2%D0%B0%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB.%20%D0%92%D0%BE%D0%B7%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%BA%D0%B0%2C%203/5%2C%20%D1%81%D1%82%D1%80.%201&details=%D0%94%D1%80%D0%B5%D1%81%D1%81-%D0%BA%D0%BE%D0%B4%3A%20Black%20tie.%0A%D0%9F%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%BE%D1%81%D1%82%D0%B8%20%E2%80%94%20%D1%81%D0%BE%D0%B2%D1%81%D0%B5%D0%BC%20%D1%81%D0%BA%D0%BE%D1%80%D0%BE." target="_blank" rel="noopener">Google Календарь</a><a class="calbtn" href="salon.ics" target="_blank" rel="noopener">Яндекс · Apple · Outlook</a></div></div></div></div></div></div><img class="ts" src="img/ticket-stub.webp" alt=""></div></div><div id="thint">Оторвите корешок — там послание для Вас</div><div id="player"><div id="plbl">Несколько слов для Вас</div><button id="pbtn" type="button" aria-label="Послушать"></button><div id="pwave"></div><div id="pnote" hidden></div></div><button type="button" id="flipBtn">перевернуть билет ↻</button></div>
+          <div class="thanks" id="thanks" hidden><div class="orn">❦</div><div class="tt">Благодарим!</div><div class="tx">Подробности — совсем скоро.</div><div class="cal"><div class="cl">Создать напоминание</div><div class="cb"><a class="calbtn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%D0%9D%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%D0%B4%D0%BD%D0%B8%D0%B9%20%D1%81%D0%B0%D0%BB%D0%BE%D0%BD%20%E2%80%94%20%D0%A4%D0%BE%D0%BD%D0%B4%20%D0%93%D0%BE%D1%80%D1%87%D0%B0%D0%BA%D0%BE%D0%B2%D0%B0&amp;dates=20261225T130000Z/20261225T170000Z&amp;ctz=Europe/Moscow&amp;location=%D0%94%D0%BE%D0%BC%20%D0%9F%D0%B0%D1%88%D0%BA%D0%BE%D0%B2%D0%B0%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB.%20%D0%92%D0%BE%D0%B7%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%BA%D0%B0%2C%203/5%2C%20%D1%81%D1%82%D1%80.%201&amp;details=%D0%A1%D0%B1%D0%BE%D1%80%20%D0%B3%D0%BE%D1%81%D1%82%D0%B5%D0%B9%20%D0%B2%2016%3A00%2C%20%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%BE%20%D0%B2%2017%3A00.%0A%D0%94%D1%80%D0%B5%D1%81%D1%81-%D0%BA%D0%BE%D0%B4%3A%20Black%20tie.%0A%D0%9F%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%BE%D1%81%D1%82%D0%B8%20%E2%80%94%20%D1%81%D0%BE%D0%B2%D1%81%D0%B5%D0%BC%20%D1%81%D0%BA%D0%BE%D1%80%D0%BE." target="_blank" rel="noopener">Google Календарь</a><a class="calbtn" href="salon.ics" target="_blank" rel="noopener">Яндекс · Apple · Outlook</a></div></div><a class="tgbtn" id="tgBtn" href="#" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 4.2 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.2 4.8 3.5c.9.5 1.5.2 1.7-.8l3.2-15c.3-1.3-.5-1.9-1.5-1.3Zm-3.5 3.4-8.6 7.8-.3 3.6-1.6-5 10.2-6.4c.5-.3.9 0 .3 0Z"/></svg>Telegram-канал салона</a></div></div></div></div><img class="ts" src="img/ticket-stub.webp" alt=""></div></div><div id="thint">Оторвите корешок — там послание для Вас</div><div id="player"><div id="plbl">Несколько слов для Вас</div><button id="pbtn" type="button" aria-label="Послушать"></button><div id="pwave"></div><div id="pnote" hidden></div></div><button type="button" id="flipBtn">перевернуть билет ↻</button></div>
   <div id="bookview">
     <div class="persp">
       <div class="book" id="book">
@@ -346,6 +353,9 @@
   const cap = document.getElementById("cap"), hint = document.getElementById("hint"), hintText = document.getElementById("hintText");
   const book = document.getElementById("book");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Telegram channel of the event — paste the link here; the button stays hidden while it is empty
+  const TG_URL = "";
+  { const b = document.getElementById("tgBtn"); if(b && TG_URL){ b.href = TG_URL; b.hidden = false; } }
 
   // ---------- sound: door creak, match, book, voice (browsers allow sound only after a tap/click/key) ----------
   let AC = null, MASTER = null, MUSIC = null, musicStarted = false, muted = false; const RAW = {}, BUF = {};
@@ -632,7 +642,7 @@
     phone.value = out;
   });
 
-  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Phone, Email, PlusOne, Signature) and submits it → Tilda CRM
+  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Phone, Email, Signature) and submits it → Tilda CRM
   function findTildaForm(){
     return [...document.querySelectorAll("form")].find(f => !f.closest("#stage") && f.querySelector('[name="Name"],[name="name"]') && f.querySelector('[name="Email"],[name="email"]'));
   }
@@ -656,7 +666,7 @@
       el.dispatchEvent(new Event("input", {bubbles:true})); el.dispatchEvent(new Event("change", {bubbles:true}));
     };
     set(["Name","name"], d.name); set(["Phone","phone"], d.phone); set(["Email","email"], d.email);
-    set(["PlusOne","plusone"], d.plusone ? "Да, хотел(а) бы прийти +1" : "Нет"); set(["Signature","signature"], d.signature);
+    set(["Signature","signature"], d.signature);
     return new Promise(res => {
       let done = false; const ok = v => { if(!done){ done = true; res(v); } };
       const box = f.querySelector(".js-successbox");
@@ -679,7 +689,7 @@
     else if(!strokes.some(st => st.length > 2)){ msg = "Поставьте, пожалуйста, подпись"; }
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
-    sendToTilda({name, phone: f.phone.value, email, plusone: f.plusone.checked, signature: sigSVG()}).then(() => {
+    sendToTilda({name, phone: f.phone.value, email, signature: sigSVG()}).then(() => {
       tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false;
     });
   });

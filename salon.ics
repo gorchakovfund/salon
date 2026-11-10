@@ -4,17 +4,17 @@ PRODID:-//Gorchakov Fund//Salon 2026//RU
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:literary-christmas-salon-20261225@gorchakovfund.github.io
-DTSTAMP:20261106T072912Z
-DTSTART:20261225T140000Z
+UID:new-year-salon-20261225@gorchakovfund.github.io
+DTSTAMP:20261110T123657Z
+DTSTART:20261225T130000Z
 DTEND:20261225T170000Z
+SUMMARY:Новогодний салон — Фонд Горчакова
 LOCATION:Дом Пашкова\, Москва\, ул. Воздвиженка\, 3/5\, стр. 1
-SUMMARY:Литературно-рождественский салон — Фонд Горчакова
-DESCRIPTION:Дресс-код: Black tie.\nПодробности — совсем скоро.
+DESCRIPTION:Сбор гостей в 16:00\, начало в 17:00.\nДресс-код: Black tie.\nПодробности — совсем скоро.
 BEGIN:VALARM
 TRIGGER:-P1D
 ACTION:DISPLAY
-DESCRIPTION:Завтра — Литературно-рождественский салон
+DESCRIPTION:Завтра — Новогодний салон
 END:VALARM
 END:VEVENT
 END:VCALENDAR
