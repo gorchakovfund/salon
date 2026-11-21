@@ -184,7 +184,7 @@
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
     grid-template-areas:"name name" "org pos" "bday email" "com com" "err go";grid-template-rows:auto auto auto 1fr auto}
   .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
-  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "email" "com" "go" "err";grid-template-rows:auto auto auto auto auto 1fr auto auto;row-gap:1.4cqh}
+  .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "email" "com" "go" "err";grid-template-rows:auto;grid-auto-rows:auto;row-gap:max(8px,1.4cqh);flex:none}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
@@ -194,6 +194,12 @@
   .fl textarea:focus{border-bottom-color:#6E1F2B}
   .fl .opt{text-transform:none;letter-spacing:.02em;font-style:italic;opacity:.8}
   .g-com{display:flex;flex-direction:column}
+  .bkc.portrait #rsvp{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px}
+  .bkc.portrait #rsvp::-webkit-scrollbar{display:none}
+  .bkc.portrait .fl textarea{flex:none;min-height:2.9em}
+  .bkc.portrait .g-go{white-space:normal;min-width:0;margin-top:4px;letter-spacing:.1em;padding-left:6px;padding-right:6px}
+  .bkc.portrait .fl{letter-spacing:.06em;overflow-wrap:break-word;min-width:0}
+  .bkc.portrait #rsvp.more{-webkit-mask-image:linear-gradient(#000 calc(100% - 46px), transparent);mask-image:linear-gradient(#000 calc(100% - 46px), transparent)}
   .bkc.portrait .ferr{font-size:max(12px,1.6cqh)}
   .bkc.portrait .fl textarea{font-size:max(15px,2.4cqh)}
   .fl input:focus{border-bottom-color:#6E1F2B;box-shadow:0 1px 0 #6E1F2B}
@@ -547,7 +553,7 @@
   }
   function bigLayout(){
     const W = innerWidth, H = innerHeight; portrait = H > W;
-    const L = portrait ? Math.min(H*.80, W*.92*1575/673) : Math.min(W*.86, H*.70*1575/673);
+    const L = portrait ? Math.min(H*.86, W*.94*1575/673) : Math.min(W*.86, H*.70*1575/673);
     tbig.style.width = L + "px"; tbig.style.marginLeft = (-L/2) + "px"; tbig.style.marginTop = (-L*673/1575/2 - (portrait ? H*.02 : H*.04)) + "px";
     tbig.style.transform = portrait ? "rotate(90deg)" : "none";
     tbig.classList.toggle("portrait", portrait); tview.classList.toggle("portrait-mode", portrait);
@@ -615,6 +621,12 @@
     setTimeout(() => window.__sigResize && window.__sigResize(), 1600);
   }
   document.getElementById("flipBtn").addEventListener("click", e => { e.stopPropagation(); flip(); });
+
+  // phones: fade the bottom edge while there is more of the form below
+  const rsvpEl = document.getElementById("rsvp");
+  const moreCheck = () => rsvpEl.classList.toggle("more", rsvpEl.scrollHeight - rsvpEl.clientHeight - rsvpEl.scrollTop > 8);
+  rsvpEl.addEventListener("scroll", moreCheck, {passive:true}); addEventListener("resize", () => setTimeout(moreCheck, 50));
+  setInterval(() => { if(tState === "flipped") moreCheck(); }, 800);
 
   // date of birth mask: ДД.ММ.ГГГГ
   const bday = document.querySelector('#rsvp [name="bday"]');
