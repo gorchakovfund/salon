@@ -182,13 +182,20 @@
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
-    grid-template-areas:"name name" "phone email" "sig sig" "err go";grid-template-rows:auto auto 1fr auto}
-  .g-name{grid-area:name}.g-phone{grid-area:phone}.g-email{grid-area:email}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
-  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "phone" "email" "sig" "go" "err";grid-template-rows:auto auto auto 1fr auto auto}
+    grid-template-areas:"name name" "org pos" "bday email" "com com" "err go";grid-template-rows:auto auto auto 1fr auto}
+  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
+  .bkc.portrait .grid{grid-template-columns:1fr;row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "email" "com" "go" "err";grid-template-rows:auto auto auto auto auto 1fr auto auto;row-gap:1.4cqh}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
   .fl input{margin-top:.6cqh;border:0;border-bottom:1px solid rgba(110,52,30,.6);background:transparent;padding:.8cqh 0;font-family:"Old Standard TT",serif;font-size:max(15px,4.4cqh);color:#2e170c;outline:none;border-radius:0;letter-spacing:0;text-transform:none}
+  .fl textarea{margin-top:.6cqh;flex:1;min-height:2.6em;resize:none;border:0;border-bottom:1px solid rgba(110,52,30,.6);background:repeating-linear-gradient(transparent 0, transparent calc(1.45em - 1px), rgba(110,52,30,.25) calc(1.45em - 1px), rgba(110,52,30,.25) 1.45em);
+    padding:.2em 0 0;font-family:"Old Standard TT",serif;font-size:max(14px,4cqh);line-height:1.45em;color:#2e170c;outline:none;border-radius:0;letter-spacing:0;text-transform:none}
+  .fl textarea:focus{border-bottom-color:#6E1F2B}
+  .fl .opt{text-transform:none;letter-spacing:.02em;font-style:italic;opacity:.8}
+  .g-com{display:flex;flex-direction:column}
+  .bkc.portrait .ferr{font-size:max(12px,1.6cqh)}
+  .bkc.portrait .fl textarea{font-size:max(15px,2.4cqh)}
   .fl input:focus{border-bottom-color:#6E1F2B;box-shadow:0 1px 0 #6E1F2B}
   .fl input::placeholder{color:rgba(110,52,30,.35)}
   .fl input.bad{border-bottom-color:#b3261e}
@@ -294,10 +301,12 @@
   <div id="tview"><div id="tbig"><div class="tk"><div class="flipper"><div class="face fr"><img class="tm" src="img/ticket-main.webp" alt=""></div><div class="face bk"><div class="bkc" id="bkc"><form id="rsvp" novalidate autocomplete="on">
             <div class="fh"><div class="fk">Подтверждение участия</div><div class="ft">Новогодний салон · 25 декабря · Дом Пашкова</div><div class="ftime">Сбор гостей — <b>16:00</b> · Начало — <b>17:00</b></div></div>
             <div class="grid">
-              <label class="fl g-name">Фамилия, имя, отчество<input name="name" autocomplete="name" required></label>
-              <label class="fl g-phone">Телефон<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
+              <label class="fl g-name">Фамилия, имя, отчество (полностью)<input name="fio" autocomplete="name" required></label>
+              <label class="fl g-org">Название организации<input name="org" autocomplete="organization" required></label>
+              <label class="fl g-pos">Должность<input name="position" autocomplete="organization-title" required></label>
+              <label class="fl g-bday">Дата рождения<input name="bday" inputmode="numeric" autocomplete="bday" placeholder="ДД.ММ.ГГГГ" maxlength="10" required></label>
               <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
-              <div class="sig g-sig"><canvas id="sigc"></canvas><div class="sl"><span>Подпись</span><button type="button" id="sigclr">очистить</button></div></div>
+              <label class="fl g-com">Дополнительный комментарий <span class="opt">(необязательно)</span><textarea name="comment" rows="2" maxlength="500"></textarea></label>
               <div class="ferr g-err" id="ferr"></div>
               <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
@@ -354,7 +363,7 @@
   const book = document.getElementById("book");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Telegram channel of the event — paste the link here; the button stays hidden while it is empty
-  const TG_URL = "https://t.me/+6_QQZSZE928zNjNi";
+  const TG_URL = "https://t.me/+IniIPXArOO1hYTRi";
   { const b = document.getElementById("tgBtn"); if(b && TG_URL){ b.href = TG_URL; b.hidden = false; } }
 
   // ---------- sound: door creak, match, book, voice (browsers allow sound only after a tap/click/key) ----------
@@ -607,42 +616,20 @@
   }
   document.getElementById("flipBtn").addEventListener("click", e => { e.stopPropagation(); flip(); });
 
-  // signature pad
-  const sigc = document.getElementById("sigc"), sg = sigc.getContext("2d"); let strokes = [], cur = null;
-  function sigDraw(){
-    const w = sigc.width, h = sigc.height, d = devicePixelRatio || 1;
-    sg.clearRect(0,0,w,h); sg.strokeStyle = "#2e170c"; sg.lineCap = "round"; sg.lineJoin = "round"; sg.lineWidth = 2.1*d;
-    for(const st of strokes){
-      if(!st.length) continue; sg.beginPath(); sg.moveTo(st[0][0]*w, st[0][1]*h);
-      for(let i=1;i<st.length;i++){ const [x0,y0] = st[i-1], [x1,y1] = st[i]; sg.quadraticCurveTo(x0*w, y0*h, (x0+x1)/2*w, (y0+y1)/2*h); }
-      sg.stroke();
-    }
-  }
-  window.__sigResize = () => { const r = sigc.getBoundingClientRect(), d = devicePixelRatio || 1, cw = sigc.clientWidth, ch = sigc.clientHeight; if(!cw) return; sigc.width = cw*d; sigc.height = ch*d; sigDraw(); };
-  function sigPt(e){
-    const r = sigc.getBoundingClientRect();   // the back side is upright on screen in both orientations
-    return [Math.min(1,Math.max(0,(e.clientX - r.left)/r.width)), Math.min(1,Math.max(0,(e.clientY - r.top)/r.height))];
-  }
-  sigc.addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); sigc.setPointerCapture(e.pointerId); cur = [sigPt(e)]; strokes.push(cur); sigDraw(); });
-  sigc.addEventListener("pointermove", e => { if(!cur) return; e.preventDefault(); cur.push(sigPt(e)); sigDraw(); });
-  ["pointerup","pointercancel"].forEach(ev => sigc.addEventListener(ev, () => { cur = null; }));
-  document.getElementById("sigclr").addEventListener("click", e => { e.stopPropagation(); strokes = []; sigDraw(); });
-  function sigSVG(){
-    const r = n => Math.round(n);
-    const d = strokes.filter(st => st.length > 1).map(st => "M" + st.map(([x,y]) => r(x*1000) + " " + r(y*300)).join(" L")).join(" ");
-    return d ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path d="${d}" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>` : "";
-  }
-
-  // phone mask: +7 (999) 999-99-99
-  const phone = document.querySelector('#rsvp [name="phone"]');
-  phone.addEventListener("input", () => {
-    let d = phone.value.replace(/\D/g, ""); if(d.startsWith("8")) d = "7" + d.slice(1); if(!d.startsWith("7")) d = "7" + d; d = d.slice(0, 11);
-    const p = d.slice(1); let out = "+7";
-    if(p.length) out += " (" + p.slice(0,3); if(p.length >= 3) out += ")"; if(p.length > 3) out += " " + p.slice(3,6); if(p.length > 6) out += "-" + p.slice(6,8); if(p.length > 8) out += "-" + p.slice(8,10);
-    phone.value = out;
+  // date of birth mask: ДД.ММ.ГГГГ
+  const bday = document.querySelector('#rsvp [name="bday"]');
+  bday.addEventListener("input", () => {
+    const d = bday.value.replace(/\D/g, "").slice(0, 8); let o = d.slice(0,2);
+    if(d.length > 2) o += "." + d.slice(2,4); if(d.length > 4) o += "." + d.slice(4,8);
+    bday.value = o;
   });
+  function validBday(v){
+    const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(v); if(!m) return false;
+    const d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo-1, d);
+    return dt.getFullYear() === y && dt.getMonth() === mo-1 && dt.getDate() === d && y > 1900 && dt < new Date();
+  }
 
-  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Phone, Email, Signature) and submits it → Tilda CRM
+  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Organization, Position, Birthdate, Email, Comment) and submits it → Tilda CRM
   function findTildaForm(){
     return [...document.querySelectorAll("form")].find(f => !f.closest("#stage") && f.querySelector('[name="Name"],[name="name"]') && f.querySelector('[name="Email"],[name="email"]'));
   }
@@ -665,8 +652,8 @@
       if(el.type === "checkbox") el.checked = !!v; else el.value = v;
       el.dispatchEvent(new Event("input", {bubbles:true})); el.dispatchEvent(new Event("change", {bubbles:true}));
     };
-    set(["Name","name"], d.name); set(["Phone","phone"], d.phone); set(["Email","email"], d.email);
-    set(["Signature","signature"], d.signature);
+    set(["Name","name"], d.name); set(["Organization","organization"], d.organization); set(["Position","position"], d.position);
+    set(["Birthdate","birthdate"], d.birthdate); set(["Email","email"], d.email); set(["Comment","comment"], d.comment);
     return new Promise(res => {
       let done = false; const ok = v => { if(!done){ done = true; res(v); } };
       const box = f.querySelector(".js-successbox");
@@ -679,17 +666,19 @@
 
   document.getElementById("rsvp").addEventListener("submit", e => {
     e.preventDefault();
-    const f = e.target, err = document.getElementById("ferr");
-    const name = f.name.value.trim(), ph = f.phone.value.replace(/\D/g, ""), email = f.email.value.trim();
-    [f.name, f.phone, f.email].forEach(i => i.classList.remove("bad"));
+    const f = e.target, el = f.elements, err = document.getElementById("ferr");
+    const v = n => el[n].value.trim();
+    ["fio","org","position","bday","email"].forEach(n => el[n].classList.remove("bad"));
+    const bad = (n, m) => { el[n].classList.add("bad"); el[n].focus({preventScroll:true}); return m; };
     let msg = "";
-    if(name.split(/\s+/).length < 2){ msg = "Укажите, пожалуйста, фамилию и имя"; f.name.classList.add("bad"); }
-    else if(ph.length < 11){ msg = "Проверьте номер телефона"; f.phone.classList.add("bad"); }
-    else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg = "Проверьте адрес почты"; f.email.classList.add("bad"); }
-    else if(!strokes.some(st => st.length > 2)){ msg = "Поставьте, пожалуйста, подпись"; }
+    if(v("fio").split(/\s+/).length < 2) msg = bad("fio", "Укажите, пожалуйста, фамилию, имя и отчество полностью");
+    else if(!v("org")) msg = bad("org", "Укажите название организации");
+    else if(!v("position")) msg = bad("position", "Укажите должность");
+    else if(!validBday(v("bday"))) msg = bad("bday", "Проверьте дату рождения: ДД.ММ.ГГГГ");
+    else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) msg = bad("email", "Проверьте адрес почты");
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
-    sendToTilda({name, phone: f.phone.value, email, signature: sigSVG()}).then(() => {
+    sendToTilda({name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")}).then(() => {
       tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false;
     });
   });
