@@ -194,6 +194,24 @@
   .fl textarea:focus{border-bottom-color:#6E1F2B}
   .fl .opt{text-transform:none;letter-spacing:.02em;font-style:italic;opacity:.8}
   .g-com{display:flex;flex-direction:column}
+  /* phones: compact, everything on one screen */
+  .bkc.portrait .fh{margin-bottom:max(4px,.8cqh)}
+  .bkc.portrait .fk{font-size:max(17px,3.2cqh)!important;line-height:1.05}
+  .bkc.portrait .ft{font-size:max(7px,1.05cqh)!important;letter-spacing:.08em;margin-top:.4cqh}
+  .bkc.portrait .ftime{font-size:max(9px,1.3cqh)!important;margin-top:.4cqh}
+  .bkc.portrait .grid{row-gap:max(4px,.8cqh)!important}
+  .bkc.portrait .fl{font-size:max(7.5px,1.15cqh)!important;line-height:1.25}
+  .bkc.portrait .fl input{font-size:16px!important;margin-top:1px;padding:2px 0 3px}
+  .bkc.portrait .fl textarea{font-size:16px!important;min-height:1.5em!important;height:1.5em;line-height:1.45em}
+  .bkc.portrait .g-go{font-size:max(10px,1.4cqh)!important;padding-top:max(7px,1.1cqh);padding-bottom:max(7px,1.1cqh)}
+  @media (max-height:620px){
+    .bkc.portrait .fk{font-size:15px!important}
+    .bkc.portrait .ft{display:none}
+    .bkc.portrait .ftime{font-size:9px!important;margin-top:2px}
+    .bkc.portrait .grid{row-gap:3px!important}
+    .bkc.portrait .fl{font-size:7.5px!important}
+    .bkc.portrait .fl input{padding:1px 0 2px}
+  }
   .bkc.portrait #rsvp{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px}
   .bkc.portrait #rsvp::-webkit-scrollbar{display:none}
   .bkc.portrait .fl textarea{flex:none;min-height:2.9em}
@@ -312,7 +330,7 @@
               <label class="fl g-pos">Должность<input name="position" autocomplete="organization-title" required></label>
               <label class="fl g-bday">Дата рождения<input name="bday" inputmode="numeric" autocomplete="bday" placeholder="ДД.ММ.ГГГГ" maxlength="10" required></label>
               <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
-              <label class="fl g-com">Дополнительный комментарий <span class="opt">(необязательно)</span><textarea name="comment" rows="2" maxlength="500"></textarea></label>
+              <label class="fl g-com">Дополнительный комментарий <span class="opt">(необязательно)</span><textarea name="comment" rows="1" maxlength="500"></textarea></label>
               <div class="ferr g-err" id="ferr"></div>
               <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
@@ -559,7 +577,7 @@
     tbig.classList.toggle("portrait", portrait); tview.classList.toggle("portrait-mode", portrait);
     const Wf = L*0.87111, Hf = L*673/1575, bkc = document.getElementById("bkc");
     // the back is read upright: on a phone (ticket turned 90°) the content is turned back
-    if(portrait){ bkc.style.width = Hf*.80 + "px"; bkc.style.height = Wf*.86 + "px"; bkc.style.transform = "translate(-50%,-50%) rotate(-90deg)"; }
+    if(portrait){ bkc.style.width = Hf*.84 + "px"; bkc.style.height = Wf*.90 + "px"; bkc.style.transform = "translate(-50%,-50%) rotate(-90deg)"; }
     else { bkc.style.width = Wf*.84 + "px"; bkc.style.height = Hf*.80 + "px"; bkc.style.transform = "translate(-50%,-50%)"; }
     bkc.classList.toggle("portrait", portrait);
     if(window.__sigResize) setTimeout(window.__sigResize, 0);
