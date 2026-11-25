@@ -668,12 +668,17 @@
   function sendToTilda(d){
     // inside the Tilda page (iframe): hand the answers to the parent page, which submits its Tilda form → CRM
     if(window.parent !== window){
+      // the Tilda page answers "ok" only when its form was really accepted
       return new Promise(res => {
-        let done = false; const ok = v => { if(!done){ done = true; removeEventListener("message", onMsg); res(v); } };
-        const onMsg = e => { if(e.data && e.data.type === "salon-rsvp-ok") ok("sent"); };
+        let done = false; const end = v => { if(!done){ done = true; removeEventListener("message", onMsg); res(v); } };
+        const onMsg = e => {
+          if(!e.data) return;
+          if(e.data.type === "salon-rsvp-ok") end("sent");
+          if(e.data.type === "salon-rsvp-fail") end("fail");
+        };
         addEventListener("message", onMsg);
         window.parent.postMessage({type:"salon-rsvp", data:d}, "*");
-        setTimeout(() => ok("sent"), 6000);
+        setTimeout(() => end("fail"), 15000);
       });
     }
     const f = findTildaForm();
@@ -710,7 +715,12 @@
     else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) msg = bad("email", "Проверьте адрес почты");
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
-    sendToTilda({name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")}).then(() => {
+    sendToTilda({name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")}).then(r => {
+      if(r === "fail"){
+        btn.disabled = false; btn.textContent = "Подтвердить участие";
+        err.textContent = "Не удалось отправить. Проверьте интернет и нажмите ещё раз.";
+        return;
+      }
       tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false;
     });
   });
