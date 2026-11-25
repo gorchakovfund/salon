@@ -390,6 +390,8 @@
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Telegram channel of the event — paste the link here; the button stays hidden while it is empty
   const TG_URL = "https://t.me/+IniIPXArOO1hYTRi";
+  // Google Apps Script web app that writes each application to the Google Sheet and notifies the Telegram bot
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycby3vmshCt3mGtwj8SBxPzuYvvcQVC7vPI1GTQe7KmTEZSlfpqwxx2ygecpYMnpDcuA/exec";
   { const b = document.getElementById("tgBtn"); if(b && TG_URL){ b.href = TG_URL; b.hidden = false; } }
 
   // ---------- sound: door creak, match, book, voice (browsers allow sound only after a tap/click/key) ----------
@@ -661,6 +663,14 @@
     return dt.getFullYear() === y && dt.getMonth() === mo-1 && dt.getDate() === d && y > 1900 && dt < new Date();
   }
 
+  // ---- backup: write straight to the Google Sheet (independent of Tilda)
+  function sendToSheet(d){
+    if(!SHEET_URL) return Promise.resolve("off");
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000);
+    return fetch(SHEET_URL, {method:"POST", body: JSON.stringify(d), signal: ctl.signal, redirect:"follow"})   // text/plain: no CORS preflight
+      .then(r => r.json()).then(j => (j && j.ok) ? "sent" : "fail").catch(() => "fail").finally(() => clearTimeout(t));
+  }
+
   // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Organization, Position, Birthdate, Email, Comment) and submits it → Tilda CRM
   function findTildaForm(){
     return [...document.querySelectorAll("form")].find(f => !f.closest("#stage") && f.querySelector('[name="Name"],[name="name"]') && f.querySelector('[name="Email"],[name="email"]'));
@@ -715,13 +725,16 @@
     else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) msg = bad("email", "Проверьте адрес почты");
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
-    sendToTilda({name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")}).then(r => {
-      if(r === "fail"){
-        btn.disabled = false; btn.textContent = "Подтвердить участие";
-        err.textContent = "Не удалось отправить. Проверьте интернет и нажмите ещё раз.";
-        return;
-      }
-      tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false;
+    f._rid = f._rid || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8));   // same id on a retry → no duplicate rows
+    const data = {id: f._rid, name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")};
+    let shown = false;
+    const thanks = () => { if(shown) return; shown = true; tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false; };
+    const sheetP = sendToSheet(data), tildaP = sendToTilda(data);
+    sheetP.then(r => { if(r === "sent") thanks(); });           // the sheet confirmed → done (Tilda keeps going in the background)
+    Promise.all([sheetP, tildaP]).then(([a, b]) => {
+      if(a === "sent" || b === "sent") return thanks();
+      btn.disabled = false; btn.textContent = "Подтвердить участие";
+      err.textContent = "Не удалось отправить. Проверьте интернет и нажмите ещё раз.";
     });
   });
 
