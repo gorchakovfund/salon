@@ -182,9 +182,9 @@
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
-    grid-template-areas:"name name" "org pos" "bday email" "com com" "err go";grid-template-rows:auto auto auto 1fr auto}
-  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
-  .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "email" "com" "err" "go";grid-template-rows:auto auto auto auto auto auto 1fr auto;row-gap:max(8px,1.4cqh);flex:1}
+    grid-template-areas:"name name" "org pos" "bday pass" "email email" "com com" "err go";grid-template-rows:auto auto auto auto 1fr auto}
+  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-pass{grid-area:pass}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
+  .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "pass" "email" "com" "err" "go";grid-template-rows:auto auto auto auto auto auto auto 1fr auto;row-gap:max(8px,1.4cqh);flex:1}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
@@ -331,6 +331,7 @@
               <label class="fl g-org">Название организации<input name="org" autocomplete="organization" required></label>
               <label class="fl g-pos">Должность<input name="position" autocomplete="organization-title" required></label>
               <label class="fl g-bday">Дата рождения<input name="bday" inputmode="numeric" autocomplete="bday" placeholder="ДД.ММ.ГГГГ" maxlength="10" required></label>
+              <label class="fl g-pass">Серия и номер паспорта<input name="passport" inputmode="numeric" autocomplete="off" placeholder="0000 000000" maxlength="11" required></label>
               <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
               <label class="fl g-com">Дополнительный комментарий <span class="opt">(необязательно)</span><textarea name="comment" rows="1" maxlength="500"></textarea></label>
               <div class="ferr g-err" id="ferr"></div>
@@ -657,6 +658,9 @@
     if(d.length > 2) o += "." + d.slice(2,4); if(d.length > 4) o += "." + d.slice(4,8);
     bday.value = o;
   });
+  // passport mask: 0000 000000
+  const pass = document.querySelector('#rsvp [name="passport"]');
+  pass.addEventListener("input", () => { const d = pass.value.replace(/\D/g, "").slice(0, 10); pass.value = d.length > 4 ? d.slice(0,4) + " " + d.slice(4) : d; });
   function validBday(v){
     const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(v); if(!m) return false;
     const d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo-1, d);
@@ -671,7 +675,7 @@
       .then(r => r.json()).then(j => (j && j.ok) ? "sent" : "fail").catch(() => "fail").finally(() => clearTimeout(t));
   }
 
-  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Organization, Position, Birthdate, Email, Comment) and submits it → Tilda CRM
+  // ---- Tilda bridge: fills the page's hidden Tilda form (fields Name, Organization, Position, Birthdate, Passport, Email, Comment) and submits it → Tilda CRM
   function findTildaForm(){
     return [...document.querySelectorAll("form")].find(f => !f.closest("#stage") && f.querySelector('[name="Name"],[name="name"]') && f.querySelector('[name="Email"],[name="email"]'));
   }
@@ -700,7 +704,7 @@
       el.dispatchEvent(new Event("input", {bubbles:true})); el.dispatchEvent(new Event("change", {bubbles:true}));
     };
     set(["Name","name"], d.name); set(["Organization","organization"], d.organization); set(["Position","position"], d.position);
-    set(["Birthdate","birthdate"], d.birthdate); set(["Email","email"], d.email); set(["Comment","comment"], d.comment);
+    set(["Birthdate","birthdate"], d.birthdate); set(["Passport","passport"], d.passport); set(["Email","email"], d.email); set(["Comment","comment"], d.comment);
     return new Promise(res => {
       let done = false; const ok = v => { if(!done){ done = true; res(v); } };
       const box = f.querySelector(".js-successbox");
@@ -715,18 +719,19 @@
     e.preventDefault();
     const f = e.target, el = f.elements, err = document.getElementById("ferr");
     const v = n => el[n].value.trim();
-    ["fio","org","position","bday","email"].forEach(n => el[n].classList.remove("bad"));
+    ["fio","org","position","bday","passport","email"].forEach(n => el[n].classList.remove("bad"));
     const bad = (n, m) => { el[n].classList.add("bad"); el[n].focus({preventScroll:true}); return m; };
     let msg = "";
     if(v("fio").split(/\s+/).length < 2) msg = bad("fio", "Укажите, пожалуйста, фамилию, имя и отчество полностью");
     else if(!v("org")) msg = bad("org", "Укажите название организации");
     else if(!v("position")) msg = bad("position", "Укажите должность");
     else if(!validBday(v("bday"))) msg = bad("bday", "Проверьте дату рождения: ДД.ММ.ГГГГ");
+    else if(v("passport").replace(/\D/g, "").length !== 10) msg = bad("passport", "Проверьте серию и номер паспорта: 10 цифр");
     else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) msg = bad("email", "Проверьте адрес почты");
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
     f._rid = f._rid || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8));   // same id on a retry → no duplicate rows
-    const data = {id: f._rid, name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), email: v("email"), comment: v("comment")};
+    const data = {id: f._rid, name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), passport: v("passport"), email: v("email"), comment: v("comment")};
     let shown = false;
     const thanks = () => { if(shown) return; shown = true; tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false; };
     const sheetP = sendToSheet(data), tildaP = sendToTilda(data);
