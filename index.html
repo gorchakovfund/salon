@@ -182,9 +182,9 @@
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
-    grid-template-areas:"name name" "org pos" "bday pass" "email email" "com com" "err go";grid-template-rows:auto auto auto auto 1fr auto}
-  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-pass{grid-area:pass}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
-  .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "pass" "email" "com" "err" "go";grid-template-rows:auto auto auto auto auto auto auto 1fr auto;row-gap:max(8px,1.4cqh);flex:1}
+    grid-template-areas:"name name" "org pos" "bday pass" "email email" "com com" "cons cons" "err go";grid-template-rows:auto auto auto auto 1fr auto auto}
+  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-pass{grid-area:pass}.g-cons{grid-area:cons;align-items:center}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
+  .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "pass" "email" "com" "cons" "err" "go";grid-template-rows:auto auto auto auto auto auto auto auto 1fr auto;row-gap:max(8px,1.4cqh);flex:1}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
   .fl{display:flex;flex-direction:column;font-size:max(9px,2.5cqh);letter-spacing:.14em;text-transform:uppercase;color:#8a5a3a}
@@ -229,6 +229,14 @@
   .chk .box{flex:none;width:max(16px,4.6cqh);height:max(16px,4.6cqh);border:1.4px solid #6e341e;margin-top:.3em;position:relative;background:rgba(255,255,255,.25)}
   .chk input:checked + .box::after{content:"";position:absolute;left:22%;top:2%;width:34%;height:62%;border:solid #6E1F2B;border-width:0 2.4px 2.4px 0;transform:rotate(42deg)}
   .chk b{font-weight:700}
+  .chk a{color:#6E1F2B;text-decoration:underline;text-underline-offset:2px}
+  .g-cons .box{margin-top:0}
+  .chk.bad .box{border-color:#b3261e;box-shadow:0 0 0 2px rgba(179,38,30,.18)}
+  .bkc.portrait .grid{min-height:min-content}
+  .bkc.portrait .g-com{min-height:auto}
+  .bkc.portrait .ferr:empty{display:none}
+  .bkc.portrait .g-cons{font-size:max(11px,1.6cqh)!important;line-height:1.3}
+  .bkc.portrait .g-cons .box{width:16px;height:16px}
   .sig{position:relative;min-height:max(70px,18cqh);display:flex;flex-direction:column}
   .sig canvas{flex:1;width:100%;min-height:0;touch-action:none;cursor:crosshair;border-bottom:1px solid rgba(110,52,30,.6);
     background:linear-gradient(transparent calc(100% - 1px), transparent) }
@@ -334,6 +342,7 @@
               <label class="fl g-pass">Серия и номер паспорта<input name="passport" inputmode="numeric" autocomplete="off" placeholder="0000 000000" maxlength="11" required></label>
               <label class="fl g-email">Электронная почта<input name="email" type="email" inputmode="email" autocomplete="email" required></label>
               <label class="fl g-com">Дополнительный комментарий <span class="opt">(необязательно)</span><textarea name="comment" rows="1" maxlength="500"></textarea></label>
+              <label class="chk g-cons"><input type="checkbox" name="consent" required><span class="box"></span><span class="ct">Я даю <a href="https://drive.google.com/file/d/1N4eEs-CPGI61w_uFXHTAJYqlEfygtyUm/view?usp=share_link" target="_blank" rel="noopener">согласие на обработку персональных данных</a></span></label>
               <div class="ferr g-err" id="ferr"></div>
               <button type="submit" class="go g-go" id="goBtn">Подтвердить участие</button>
             </div>
@@ -661,6 +670,7 @@
   // passport mask: 0000 000000
   const pass = document.querySelector('#rsvp [name="passport"]');
   pass.addEventListener("input", () => { const d = pass.value.replace(/\D/g, "").slice(0, 10); pass.value = d.length > 4 ? d.slice(0,4) + " " + d.slice(4) : d; });
+  document.querySelector('#rsvp [name="consent"]').addEventListener("change", e => { if(e.target.checked){ e.target.closest(".chk").classList.remove("bad"); const fe = document.getElementById("ferr"); if(/согласие/.test(fe.textContent)) fe.textContent = ""; } });
   function validBday(v){
     const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(v); if(!m) return false;
     const d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo-1, d);
@@ -704,7 +714,7 @@
       el.dispatchEvent(new Event("input", {bubbles:true})); el.dispatchEvent(new Event("change", {bubbles:true}));
     };
     set(["Name","name"], d.name); set(["Organization","organization"], d.organization); set(["Position","position"], d.position);
-    set(["Birthdate","birthdate"], d.birthdate); set(["Passport","passport"], d.passport); set(["Email","email"], d.email); set(["Comment","comment"], d.comment);
+    set(["Birthdate","birthdate"], d.birthdate); set(["Passport","passport"], d.passport); set(["Consent","consent"], d.consent); set(["Email","email"], d.email); set(["Comment","comment"], d.comment);
     return new Promise(res => {
       let done = false; const ok = v => { if(!done){ done = true; res(v); } };
       const box = f.querySelector(".js-successbox");
@@ -721,17 +731,18 @@
     const v = n => el[n].value.trim();
     ["fio","org","position","bday","passport","email"].forEach(n => el[n].classList.remove("bad"));
     const bad = (n, m) => { el[n].classList.add("bad"); el[n].focus({preventScroll:true}); return m; };
-    let msg = "";
+    let msg = ""; el.consent.closest(".chk").classList.remove("bad");
     if(v("fio").split(/\s+/).length < 2) msg = bad("fio", "Укажите, пожалуйста, фамилию, имя и отчество полностью");
     else if(!v("org")) msg = bad("org", "Укажите название организации");
     else if(!v("position")) msg = bad("position", "Укажите должность");
     else if(!validBday(v("bday"))) msg = bad("bday", "Проверьте дату рождения: ДД.ММ.ГГГГ");
     else if(v("passport").replace(/\D/g, "").length !== 10) msg = bad("passport", "Проверьте серию и номер паспорта: 10 цифр");
     else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) msg = bad("email", "Проверьте адрес почты");
+    else if(!el.consent.checked){ el.consent.closest(".chk").classList.add("bad"); msg = "Подтвердите согласие на обработку персональных данных"; }
     err.textContent = msg; if(msg) return;
     const btn = document.getElementById("goBtn"); btn.disabled = true; btn.textContent = "Отправляем…";
     f._rid = f._rid || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8));   // same id on a retry → no duplicate rows
-    const data = {id: f._rid, name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), passport: v("passport"), email: v("email"), comment: v("comment")};
+    const data = {id: f._rid, name: v("fio"), organization: v("org"), position: v("position"), birthdate: v("bday"), passport: v("passport"), email: v("email"), comment: v("comment"), consent: "Да, " + new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"})};
     let shown = false;
     const thanks = () => { if(shown) return; shown = true; tState = "sent"; f.hidden = true; document.getElementById("thanks").hidden = false; };
     const sheetP = sendToSheet(data), tildaP = sendToTilda(data);
