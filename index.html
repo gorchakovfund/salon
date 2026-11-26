@@ -182,8 +182,8 @@
   .fk{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:max(18px,7.2cqh);line-height:1;color:#6E1F2B}
   .ft{font-size:max(9px,2.6cqh);letter-spacing:.18em;text-transform:uppercase;color:#8a5a3a;margin-top:1.4cqh}
   .grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:6cqw;row-gap:3.2cqh;
-    grid-template-areas:"name name" "org pos" "bday pass" "email email" "com com" "cons cons" "err go";grid-template-rows:auto auto auto auto 1fr auto auto}
-  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-pass{grid-area:pass}.g-cons{grid-area:cons;align-items:center}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
+    grid-template-areas:"name name" "org pos" "bday pass" "email email" "com com" "cons go" "err go";grid-template-rows:auto auto auto auto 1fr auto auto}
+  .g-name{grid-area:name}.g-org{grid-area:org}.g-pos{grid-area:pos}.g-bday{grid-area:bday}.g-pass{grid-area:pass}.g-cons{grid-area:cons;align-items:center;align-self:center}.g-go{align-self:center}.g-com{min-height:max(44px,13cqh)!important;overflow:hidden}.g-com textarea{min-height:0!important}.ferr:empty{display:none}.g-email{grid-area:email}.g-com{grid-area:com;min-height:0}.g-chk{grid-area:chk;align-self:end}.g-sig{grid-area:sig}.g-err{grid-area:err;align-self:center}.g-go{grid-area:go}
   .bkc.portrait .grid{grid-template-columns:minmax(0,1fr);row-gap:2cqh;grid-template-areas:"name" "org" "pos" "bday" "pass" "email" "com" "cons" "err" "go";grid-template-rows:auto auto auto auto auto auto auto auto 1fr auto;row-gap:max(8px,1.4cqh);flex:1}
   .bkc.portrait .g-chk{align-self:start}
   .col{flex:1;display:flex;flex-direction:column;gap:3cqh;min-width:0}
